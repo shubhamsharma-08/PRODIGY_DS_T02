@@ -1,0 +1,46 @@
+import seaborn as sns
+df = sns.load_dataset('titanic')
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df.head()           # First 5 rows
+df.info()           # Column info
+df.describe()       # Stats of numerical columns
+df.isnull().sum()   # Check missing values
+
+# Drop 'deck' column due to high missing values
+df.drop(columns='deck', inplace=True)
+
+# Fill missing age with median
+df['age'].fillna(df['age'].median(), inplace=True)
+
+# Fill embarked with mode
+df['embarked'].fillna(df['embarked'].mode()[0], inplace=True)
+
+df['sex'] = df['sex'].map({'male': 0, 'female': 1})
+df['embarked'] = df['embarked'].map({'S': 0, 'C': 1, 'Q': 2})
+
+# Survived vs Gender
+sns.countplot(x='survived', hue='sex', data=df)
+plt.title('Survival Count by Gender')
+plt.show()
+
+#Survival Rate by Passenger Class
+sns.barplot(x='pclass', y='survived', data=df)
+plt.title('Survival Rate by Passenger Class')
+plt.show()
+
+#Age Distribution
+sns.histplot(df['age'], bins=30, kde=True)
+plt.title('Age Distribution')
+plt.show()
+
+#Correltion HeatMap
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix')
+plt.show()
+
+sns.pairplot(df[['age', 'fare', 'pclass', 'survived']], hue='survived')
+plt.show()
